@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <title>  Hello DOM </title>
+    
+</head>
+
+<body>
+    <h1 id="name">Hello DOM</h1>
+</body>
+<!-- <script>
+    setTimeout(function(){
+        console.log('changing content new ')
+        document.getElementById("name").innerHTML = "Hi Vikram"
+
+    }, 3000) 
+
+</script> -->
+
+<script>
+    let i = 0
+    document.getElementById("name").innerHTML = "Hi Vikram"
+
+    setInterval(function(){
+        console.log('changing content new ')
+
+        if (i % 2 == 0) {
+            document.getElementById("name").style.color = "red"
+        } else {
+            document.getElementById("name").style.color = "blue"
+        }
+        i++;
+
+    }, 1000)
+     
+</script>
+
+</html>
