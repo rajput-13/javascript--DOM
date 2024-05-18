@@ -1,0 +1,26 @@
+<!- getElementByTagName -> 
+
+<html>
+
+<head>
+    <title> getElementByTagName </title>
+</head>
+
+<body>
+    <h1 id="tagname1"> hello  Tag 1</h1>
+    <h1 id="tagname2"> hello  Tag 2</h1>
+    <h1 id="tagname3"> hello  Tag 3</h1> 
+
+</body>
+
+<script>
+    var heading = [... document.getElementsByTagName("h1")]
+    heading.forEach(function (h) { h.innerHTML = "new hello" })
+
+    document.getElementsByTagName("h1")[0].style.color = "red"
+
+</script>
+
+</html>
+
+
