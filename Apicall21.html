@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fetch() API Call</title>
+</head>
+<body>
+    <button id="btnUsers" onclick="getUsers()">Users</button>
+    <button id="btnTodos" onclick="getTodos()">Todos</button>
+
+    <hr/>
+
+    <div id="data">
+
+    </div>
+</body>
+
+<script>
+    const data = document.getElementById("data")  // line 34 35 36 को इसमे add करेगे 
+    function getUsers() {
+        data.innerHTML = 'Loading......'
+
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then((response) => {
+                data.innerHTML = ''
+                return response.json()
+            })
+            .then((jsonData) => {
+                console.log(jsonData)
+
+                for (user of jsonData) {  // लाइन 30  31 बाल डाटा इसमे चलना है loop में 
+                    const userDataDiv = document.createElement("div") // document ke andr milta hai create document
+                    userDataDiv.innerHTML = user.email  //इसको inner html में डालना है  todo को 
+                    userDataDiv.id = user.id    // इसमे id भी add krte है 
+
+                    data.appendChild(userDataDiv)  // इस फfunction में userdatadiv डालएगे  child में एक एक add करते जाएगा 
+                }
+            })
+            .catch(e => console.log(e))
+    }
+
+    function getTodos() {
+        data.innerHTML = 'Loading......' // load होकर मिलेगा 
+
+        fetch("https://jsonplaceholder.typicode.com/todos")
+            .then((response) => {
+                data.innerHTML = ''
+                return response.json()
+            })
+            .then((jsonData) => {
+                console.log(jsonData)
+
+                for (todo of jsonData) { // लाइन 52 53 बाल डाटा इसमे चलना है loop में 
+                    const userDataDiv = document.createElement("div") // document ke andr milta hai create document
+                    userDataDiv.innerHTML = todo.title //इसको inner html में डालना है  todo को 
+                    userDataDiv.id = todo.id  // इसमे id भी add krte है 
+
+                    data.appendChild(userDataDiv)
+                }
+            })
+            .catch(e => console.log(e))
+    }
+</script>
+</html>
