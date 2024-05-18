@@ -1,0 +1,43 @@
+<!- best technique update CSS Using SetClass Attribute in javascript ->
+
+    <head>
+        <title> Style property </title>
+        <style>
+            #title {
+                border: 3px solid #000;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .red {
+                color: red;
+                background-color: #000;
+            }
+
+            .black {
+                color: black;
+                background-color: red;
+            }
+            .fsize {
+                font-size: large;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="title">Hello Javascript </div>
+    </body>
+
+    <script>
+        setInterval(function () {
+            const title = document.getElementById("title")
+            if (new Date().getSeconds() % 2 === 0) {
+                title.setAttribute("class", "red fsize")
+            } else {
+                title.setAttribute("class", "black fsize")
+            }
+        }, 1000)
+
+    </script>
+
+    </html>
