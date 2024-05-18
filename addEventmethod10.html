@@ -1,0 +1,68 @@
+<!- addEventListener() method and add multiple click button ->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Event Attrribut Button</title>
+    <style>
+        div {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        No1 : <input type="text" id="no1" >
+    </div>  
+    <div>
+        No2 : <input type="text" id="no2">
+    </div>
+    <div>
+        <button id="add" >Add</button>
+    </div>
+    <div>
+        <h3 id="answer"></h3>
+    </div>
+    
+</body>
+
+<script>
+    const no1 = document.getElementById("no1") 
+    const no2 = document.getElementById("no2") 
+    const addbutton = document.getElementById("add")
+
+    addbutton.addEventListener("click", add)
+    
+    no1.addEventListener("focus", changecolor)
+    no1.addEventListener("blur", changecoloronblur)
+
+    no2.addEventListener("focus", changecolor)
+    no2.addEventListener("blur", changecoloronblur)
+
+
+    function add() {
+        const sum = parseFloat(no1.value) + parseFloat(no2.value)
+        document.getElementById("answer").innerText =sum
+
+    }
+
+    function changecolor(element) {
+        console.log(element.target.id, "focused")
+        element.target.style.backgroundColor = "yellow"
+
+    }
+
+    
+    function changecoloronblur(element) {
+        console.log(element.target.id, "blured")
+        element.target.style.backgroundColor = "white"
+
+    }
+
+    document.getElementById("add").onclick =function () {
+        console.log("update add button event")
+    }
+    
+
+</script>
+</html>
