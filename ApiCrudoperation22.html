@@ -1,0 +1,42 @@
+<!- API CRUD -  Get/ Post/ Put/ Delete/ Add  ->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API CRUD OPERATION ALL</title>
+</head>
+<body>
+    <input type="text" id="blog-title">
+    <input type="text" id="blog-content">
+    <button id="btn-save" onclick="sumbitBlog()">submit</button>
+
+</body>
+
+<script>
+    const blogTitle = document.getElementById("blog-title")  // event call kr liya hai 
+    const blogContent = document.getElementById("blog-content")  // event call ke liya hai 
+    const api = "http://localhost:3000/blogs"             // now call server ,  server ka url API variable mei url dege 
+    
+     async function sumbitBlog() {
+        const blog = {
+            title: blogTitle.value,     // server ko jo key bhejna hai bho hi hame chahie   " blogtitle mei value asign kr diya "
+            content: blogContent.value  //jo server ko chahie bho bhi jya se bhej dete hai 
+        }
+
+        const response = await fetch(api, {  //fetch ke bad url ,  url api variable mei store kiya hai 
+            method: "POST",  // post method islye data server ko dene bale hai 
+            body: JSON.stringify(blog),  // जो डाटा भेजना है इसमे रखेगे  // line 23 to 26 bala code krna padta hai format  "JSON.stringify()"   or bhi library hai market mei is case mei yeh hi krege      
+            headers: { //  ""headers server read krege ki kon se chieg aae hai"  headers key add krna hai isme andr rakhna hai "
+                "Content-Type": "application/json"
+
+            }
+        })                // data server ko bhejna  is case mei BODY istmal krege line 23 mei variable bhi le lete hai 
+        
+        const json = await response.json()  // response ka object ismei json ka data chahie , json data bhejna 'json hi aaega data '
+        console.log(json)
+
+    }
+</script>
+</html>
