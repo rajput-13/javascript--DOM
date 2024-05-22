@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Axios fetch Library combine </title>
+    <style>
+        body {
+            background-color: bisque;
+        }
+        .blog-div {
+            padding: 10px;
+            border: 2px solid #000;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" id="blog-id">  <!-id hidden chahie user ko dikhe na ya added na kr sake ->
+    <input type="text" id="blog-title">
+    <input type="text" id="blog-content">
+    <button id="btn-save" onclick="submitBlog()">Submit</button>
+    <hr/>
+    <div id="blog-data">
+
+    </div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script> <!- axios library  link pasted here  first ->
+
+<script>
+    const blogId = document.getElementById("blog-id")
+    const blogTitle = document.getElementById("blog-title")
+    const blogContent = document.getElementById("blog-content")
+    const blogData = document.getElementById("blog-data")
+    const api = "http://localhost:3000/blogs"
+
+    getBlogs()
+
+    async function submitBlog() {
+        const blog = {
+            title: blogTitle.value,
+            content: blogContent.value
+        }
+
+        const apiUrl = blogId.value ? `${api}/${blogId.value}` : api
+        const method = blogId.value ? "PUT" : "POST"
+
+        const response = await axios({ url: apiUrl, data: blog, method }) // use axios in place fetch
+        // isme alag alag property istmal krte hai         
+        // data ke bad method pass krege  kyuki method variable mei pass kiya hai  
+        // put post (ka code ek line mei ho gya  fetch ma bada code tha ,  axios is liye develpoer use krte hai)  
+
+         // const json = await response.json()   // json place data  // data header fetch ke liye await nahi istmal krna hai
+         const json = response.data  // not use await // axios ke case mei  await achal mei axios istmal krege tab line 54 mei 
+         console.log(json)
+         await getBlogs()
+         blogTitle.value = ''
+         blogContent.value = ''
+         blogId.value = ''
+    }
+
+    async function getBlogs() {
+        blogData.innerHTML = ''
+
+        const response = await axios({ url: api, method: "get" }) // fetch ki jagha axios  krege // data get krege
+        console.log(response) // axios (" await  istmal krege ")
+        
+
+        const json = response.data // const json = await response.json()
+        console.log(json)      // json not working this ("use data")  data add ho gya
+
+        for(let blog of json) {
+            const blogDiv = document.createElement("div")
+            blogDiv.id = blog.id
+            blogDiv.classList.add("blog-div")
+            blogDiv.innerHTML = `
+            <h2>${blog.title}</h2> 
+            <p>${blog.title}</p>
+            <button id="btn-edit" onclick="editBlog('${blog.id}')">Edit</button> | 
+            <button id="btn-delete" onclick="deleteBlog('${blog.id}')">Delete</button>
+            `
+            blogData.appendChild(blogDiv)
+        }
+    }
+
+    async function deleteBlog(id) {
+        if(!confirm("Are you sure?")) {
+            return false
+        }
+
+        const response = await axios({ url: `${api}/${id}`, method: "delete" })
+
+        const json = response.data
+
+        console.log(json)
+        await getBlogs()
+    }
+
+    async function editBlog(id) {
+        const response = await fetch(`${api}/${id}`, {
+            method: "GET"
+        })
+
+        const json = await response.json()
+        console.log(json)
+        blogId.value = json.id
+        blogTitle.value = json.title
+        blogContent.value = json.content
+    }
+
+</script>
+</html>
