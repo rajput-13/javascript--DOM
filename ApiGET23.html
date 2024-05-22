@@ -1,0 +1,57 @@
+<!-  see after 22 its GET method  ->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API CRUD OPERATION ALL</title>
+</head>
+<body>
+    <input type="text" id="blog-title">
+    <input type="text" id="blog-content">
+    <button id="btn-save" onclick="sumbitBlog()">submit</button>
+ 
+
+</body>
+
+<script>
+    const blogTitle = document.getElementById("blog-title")  
+    const blogContent = document.getElementById("blog-content")  
+    const api = "http://localhost:3000/blogs"             
+
+    getBlog() // refresh ke bad first time hi data dikhna chahie bhar likh dege isko call kre (await parent ke bhar nahi likhte hai )
+    
+     async function sumbitBlog() {
+        const blog = {
+            title: blogTitle.value,     
+            content: blogContent.value  
+        }
+
+        const response = await fetch(api, { 
+             method: "POST",  
+             body: JSON.stringify(blog),  
+             headers: {     
+                "Content-Type": "application/json"
+
+            }
+        })                
+
+        
+        
+        const json = await response.json()  
+        console.log(json)
+        await getBlog()             // data call ho gya isme bhi call krba sakte hai   (call ke liye await likhte hai )         
+    }
+
+    async function getBlog() {     // get  method server kuch return krega 
+        const response = await fetch(api, {   // store krege response mei , same url post ki traha api variable mei hai 
+            method: "GET"   // get  mei server ko data nahi dena hota hai sirf "get" krke hai  (is case mei body header ka koi kam nahi hai ) 
+        })   // return krte hai 
+
+        const json = await response.json()    // json ka dat get krna hai await ke bine promise return krege (data nahi milega )
+        console.log(json)
+    }
+
+</script>
+</html>
