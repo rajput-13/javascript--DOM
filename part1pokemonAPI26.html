@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon - pokeapi.co part 1 </title>
+</head>
+<body>
+    <h1> PokeAPI.co</h1>
+    <div id="poke-list">   <!- ek ek krege dhege ->
+    </div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>   <!- axios link pasted here  first ->
+
+<script>
+
+    const pokelist = document.getElementById("poke-list")// div mei button add se phle fetch kr lete hai line 45 46
+
+    getListPokemon() // function call
+
+    async function getListPokemon() {   // first paste axios link cdn then second function create 
+       const response = await  axios ({ url:"https://pokeapi.co/api/v2/pokemon", method:"get"})  // function link mei se mil jaega (ismei pass krna hai {object url ke andr   url : "",})
+    //    const data = response.data
+    //    console.log(response,data)
+    //    const results = data.results // data ke andr result chahie  code bada ho raha hai "destructure" krege  
+          const {data: {results }} = response // destrucure se ek line mei kamm ho gya 
+
+
+          console.log(results)
+          
+          for (pokemon of results) {
+                const urlArray = pokemon.url.split("/")   // image mei id nahi mil rahi hai is line mei logic lgate hai  "split"
+                const id = (urlArray.pop(), urlArray.pop()) // 2 bar pop krege too bho piche se 2 element return  krega // image ke liye id fetch krna hai 
+                
+                const btn = document.createElement("button")              // ek ek pokemon display krna hai 
+                const span = document.createElement("span")              // create button
+                span.innerHTML = pokemon.name 
+
+                const img = document.createElement("img")
+                img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`
+                img.style.width = "20px"
+
+
+                btn.appendChild(img)    // image aur name ko abhi add krege     "button mei " 
+                btn.appendChild(span)   // name   , then button ko add krege list bale mei line ( 10 ) 
+
+                pokelist.appendChild(btn) // yeh affter call line  18 
+
+          }
+    }
+
+</script>
+</html>
