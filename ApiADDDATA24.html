@@ -1,0 +1,103 @@
+<!- added data and delete   in api- >
+<!-  see after 22 its GET method  ->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API CRUD OPERATION ALL</title>
+    <style>  /* add css */
+        .blog-div {
+            padding: 10px;
+            border: 2px solid red;
+            margin-top: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <input type="text" id="blog-title">
+    <input type="text" id="blog-content">
+    <button id="btn-save" onclick="sumbitBlog()">submit</button>
+    <hr/>   
+    <div id="blog-data"></div>        <!- add data  in blog- data this variable ->
+
+</body>
+
+<script>
+    const blogTitle = document.getElementById("blog-title")  
+    const blogContent = document.getElementById("blog-content")  
+    const blogData = document.getElementById("blog-data")  // phle get krte hai blog data ko  (phir use for loop) 
+
+    const api = "http://localhost:3000/blogs"             
+
+    getBlog() 
+    
+     async function sumbitBlog() {
+        const blog = {
+            title: blogTitle.value,     
+            content: blogContent.value  
+        }
+
+        const response = await fetch(api, { 
+             method: "POST",  
+             body: JSON.stringify(blog),  
+             headers: {     
+                "Content-Type": "application/json"
+
+            }
+        })                
+
+              
+        const json = await response.json()  
+        console.log(json)
+        await getBlog()  
+        blogTitle.value = ''    // bar bar n dekhe  empty
+        blogContent.value = '' // empty rakhna hai                
+    }
+
+    async function getBlog() {   
+        blogData.innerHTML = ''    // phir se block display n kre   clean krne ke liye 
+        const response = await fetch(api, {   
+            method: "GET"   
+        })   
+
+        const json = await response.json()    
+        console.log(json)
+
+        for (let blog of json) { // json isliye kyuki json mei array mil raha hai to use krege for loop
+            const  blogDiv = document.createElement("div")    // declair variable , create element krege istmal
+            blogDiv.id = blog.id //  blogDIv.id mei id milegi blog.id ki
+            blogDiv.classList.add("blog-div")   // now add class (add function mei , , , multiclass addkr sakte hai  
+            blogDiv.innerHTML =`   
+            <h2>${blog.title} </h2> /
+            <p>${blog.title} </p>
+            <button id="btn-add"> Add </ button> |  
+            <button id="btn-edit"> Edit </ button> |  
+
+            <button id="btn-delete" onclick="deleteBlog('${blog.id}')"> Delete </button>
+            `
+            blogData.appendChild(blogDiv) // add dev
+             /*  isme rakhna hai html use back code  ismei interpolation rakhne bale hai  line 70 to 79   */
+        }
+    }
+
+    async function deleteBlog(id) {   // now create delete blog function line 77
+        if(!confirm("Are you Sure?")) {
+            // return false
+        }
+        const response = await fetch(`${api}/${id}`, {          // string interpolation bhi use kr sakte hai 
+            method: "DELETE"                                    // delete method call krege server mei delete ke liye 
+        })
+        const json = await response.json()     // response milega 
+
+        console.log(json)
+        await getBlog() // 
+
+    }
+        //const response = await fetch(api + "/" + id)  // +"/" yeh rakna hakhna hai sath delete id rakhni hai 
+
+
+</script>
+</html>
