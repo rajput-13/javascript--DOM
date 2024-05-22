@@ -1,0 +1,120 @@
+<!-  api edit mei id milegi and added ->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API </title>
+    <style>  
+        .blog-div {
+            padding: 10px;
+            border: 2px solid red;
+            margin-top: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <input type="hidden" id="blog-id">  <!-id hidden chahie user ko dikhe na ya added na kr sake ->
+    <input type="text" id="blog-title">
+    <input type="text" id="blog-content">
+    <button id="btn-save" onclick="sumbitBlog()">submit</button>
+    <hr/>   
+    <div id="blog-data"></div>        
+
+</body>
+
+<script>
+    const blogID = document.getElementById("blog-id")  
+    const blogTitle = document.getElementById("blog-title")  
+    const blogContent = document.getElementById("blog-content")  
+    const blogData = document.getElementById("blog-data")   
+
+    const api = "http://localhost:3000/blogs"             
+
+    getBlog() 
+    
+     async function sumbitBlog() {
+        const blog = {
+            title: blogTitle.value,     
+            content: blogContent.value  
+        }
+        const apiUrl = blogId.value ?  `${api}/${blog.value}` : api  // edit variable declair and check condition (blogid.value) edit form mei hai  
+                                                                    //`${api}/${blog.value}`  bho value nahi to : api rakhna hai 
+        const method = blogId.value ?  "PUT" : "POST"  // line 47 call method condition [" put  otherwise post "]
+        const response = await fetch(apiUrl, {        // jab bhi hidden id piche id add kr dega (" url same rahega" )
+            // method: "POST",   // post hai condition rakhege 
+            method,
+             body: JSON.stringify(blog),  
+             headers: {     
+                "Content-Type": "application/json"
+
+            }
+        })                
+
+              
+        const json = await response.json()  
+        console.log(json)
+        await getBlog()  
+        blogTitle.value = ''    
+        blogContent.value = ''            
+    }
+
+    async function getBlog() {   
+        blogData.innerHTML = ''    
+        const response = await fetch(api, {   
+            method: "GET"   
+        })   
+
+        const json = await response.json()    
+        console.log(json)
+
+        for (let blog of json) { 
+            const  blogDiv = document.createElement("div")   
+            blogDiv.id = blog.id 
+            blogDiv.classList.add("blog-div")  // line 76 onclick krege 
+            blogDiv.innerHTML =`   
+            <h2>${blog.title} </h2> /
+            <p>${blog.title} </p>
+            <button id="btn-add"> Add </ button> |  
+            <button id="btn-edit"onclick="editBlog('${blog.id}')"> Edit </ button> |   
+
+            <button id="btn-delete" onclick="deleteBlog('${blog.id}')"> Delete </button>
+            `
+            blogData.appendChild(blogDiv) // add dev
+            
+        }
+    }
+
+    async function deleteBlog(id) {   
+        if(!confirm("Are you Sure?")) {
+            // return false
+        }
+        const response = await fetch(`${api}/${id}`, {          
+            method: "DELETE"                                  
+        })
+        const json = await response.json()     
+
+        console.log(json)
+        await getBlog() 
+
+    }
+
+    async function editBlog(id) {          // line 76 function create
+        const response = await fetch(`${api}/${id}`, {
+            method: "GET"
+        })
+
+        const json = await response.json() // ismei milega id data content
+        console.log(json)
+        blogID.value = json.id
+        blogTitle.value = json.title  // blog title is variable mei dalege
+        blogContent.value = json.content   // contect ismei chahie 
+
+    }
+
+
+
+</script>
+</html>
