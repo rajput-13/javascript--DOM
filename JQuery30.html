@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> JQuery</title>
+    <style>
+        h1 {
+            padding: 10px;
+            background-color: aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="title">Hi Jquery</h1>                 <!-  id rakhte hai- >
+    <button id="hide" onclick="hide()">Hide</button> <!- button rakhte hai sath hide bhi - >
+    <button id="show" onclick="show()">Show</button> <!- button rakhte hai sath Show krege  - >
+    <button id="animation" onclick="animation()">Animation</button> <!- Animation krege  - >
+
+    
+</body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"     
+integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+crossorigin="anonymous"></script> <!-  jquery link minified- >
+
+<script>
+    function hide() {      // function bnate hai aur isme rakhte hai 
+        $("#title").hide(4000)          // line 10 bale element fetch krte hai  // jquery  start   (" $ "" ) // hide ke sath duration 1 second
+
+    }
+
+    function show() {  // show ko call krege yani function bnaege  line 18 
+        $("#title").show(3000)  // show krege 
+    }
+
+    
+    function animation() {  // animation ko call krege yani function bnaege  line 19  ka
+        $("#title").animate({  // animate animation  krege 
+            width: "150px",    // isme jo bhi animation krbana hai 
+            //backgroundcolor: "red"  // jquery mei css ki tarha nahi hota isme ek sath likhte hai backgroundcolor ko , iske liye pulag dalna padega 
+            fontSize: "50px"
+
+        }, 5000)
+    }
+</script>
+
+</html>
