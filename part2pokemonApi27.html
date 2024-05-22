@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon - pokeapi.co part 2</title>
+</head>
+<body>
+    <h1>PokeAPI.co</h1>
+    <div id="poke-list">
+
+    </div>
+
+    <div id="poke-info">  <!- ek aur div bnate hai  (uper hi define kr diya )  ->
+        <img src="" id="poke-img"/>  <!- Display krege  name, type, move,->
+        <h2 id="poke-name"></h2>
+        <h3 id="poke-type"></h2>
+        <h3 id="poke-move"></h2>
+    </div>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script> <!- axios link pasted here  first ->
+
+<script>
+
+    const pokeList = document.getElementById('poke-list')
+
+    getListPokemon()  // function call
+
+    async function getListPokemon() {
+        const response = await axios({ url: "https://pokeapi.co/api/v2/pokemon", method: "get" })
+        const { data: { results }} = response
+
+        console.log(results)
+
+        for(pokemon of results) {
+            const urlArr = pokemon.url.split("/")
+            const id = (urlArr.pop(), urlArr.pop())
+
+            const btn = document.createElement("button")  // add click event on button
+            
+            const span = document.createElement("span")
+            span.innerHTML = pokemon.name
+
+            const img = document.createElement("img")
+            img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`
+            img.style.width = "20px"
+
+            btn.appendChild(img)
+            btn.appendChild(span)
+
+            btn.setAttribute("onclick", `getPokemon(${id})`) // line 41 ke upr add click event "jo set krna hai usko setattribute(krke kr sakte hai)"
+                     // varivale "getpokemon and id   yeh call ho raha hai function bnana hai iska"
+
+            pokeList.appendChild(btn)
+        }
+    }
+
+    async function getPokemon(id) {   // line 54 ka funtion
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+        // ya 2nd   method ({url: "https://pokeapi.co/api/v2/pokemon", method:"get"})   bhi krte hai  use any one
+        const { data: { name, types, moves, sprites } } = response  // response ko destructure krte hai  (image milta hai:- spirites property mei )
+
+        const pokeImg = document.getElementById('poke-img') // ek ek div ko fetch krege image, 
+        const pokeName = document.getElementById('poke-name') // name fetch
+        const pokeType = document.getElementById('poke-type') // type fetch
+        const pokeMove = document.getElementById('poke-move') // move fetch
+
+        pokeImg.src = sprites.other.dream_world.front_default  // pokeimg mei jaega src aur search krege dream mei front ko
+        pokeName.innerHTML = name
+        pokeType.innerHTML = types.map(type => type.type.name).join(",")   // type fetch krege
+        pokeMove.innerHTML = moves.map(move => move.move.name).join(",")   // move  fetch krege // move function
+    }
+    
+</script>
+</html>
